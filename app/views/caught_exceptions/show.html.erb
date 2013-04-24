@@ -1,0 +1,34 @@
+<%- model_class = CaughtException -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human %></h1>
+</div>
+
+<dl class="dl-horizontal">
+  <dt><strong><%= model_class.human_attribute_name(:_id) %>:</strong></dt>
+  <dd><%= @caught_exception._id %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:backtraces) %>:</strong></dt>
+  <dd><%= @caught_exception.backtraces %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:session) %>:</strong></dt>
+  <dd><%= @caught_exception.session %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:params) %>:</strong></dt>
+  <dd><%= @caught_exception.params %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:error_class) %>:</strong></dt>
+  <dd><%= @caught_exception.error_class %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:error_message) %>:</strong></dt>
+  <dd><%= @caught_exception.error_message %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:server_address) %>:</strong></dt>
+  <dd><%= @caught_exception.server_address %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:user_agent) %>:</strong></dt>
+  <dd><%= @caught_exception.user_agent %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:server_name) %>:</strong></dt>
+  <dd><%= @caught_exception.server_name %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:server_port) %>:</strong></dt>
+  <dd><%= @caught_exception.server_port %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:remote_address) %>:</strong></dt>
+  <dd><%= @caught_exception.remote_address %></dd>
+</dl>
+
+<div class="form-actions">
+  <%= link_to t('.back', :default => t("helpers.links.back")),
+              caught_exceptions_path, :class => 'btn'  %>
+</div>

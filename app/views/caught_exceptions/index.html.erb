@@ -1,0 +1,91 @@
+<%- model_class = CaughtException -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
+</div>
+
+<table class="table table-striped table-hover table-bordered">
+  <tbody>
+    <% @caught_exceptions.each do |caught_exception| %>
+      <tr>
+        <td>
+          <%=l caught_exception.created_at, :format => :long %>
+          <span class="label label-warning"><%= caught_exception.error_class %></span>
+          <%= caught_exception.error_message %>
+        </td>
+        <td>
+          <div>
+            <button id="show-button-<%= caught_exception._id %>" class="btn btn-info">Show</button>
+          </div>
+          <div id="content-<%= caught_exception._id %>" style="display:none">
+            <div class="well">
+              <%= model_class.human_attribute_name(:backtraces) %>
+              <div class="editor" id="editor-backtraces-<%= caught_exception._id %>"></div>
+            </div>
+            <div class="well">
+              <%= model_class.human_attribute_name(:session) %>
+              <div class="editor" id="editor-session-<%= caught_exception._id %>"></div>
+            </div>
+            <div class="well">
+              <%= model_class.human_attribute_name(:params) %>
+              <div class="editor" id="editor-params-<%= caught_exception._id %>"></div>
+            </div>
+            <table class="table table-striped table-hover table-condensed table-bordered">
+              <tbody>
+                <tr>
+                  <td><%= model_class.human_attribute_name(:server_address) %></td>
+                  <td><%= caught_exception.server_address %></td>
+                </tr>
+                <tr>
+                  <td><%= model_class.human_attribute_name(:user_agent) %></td>
+                  <td><%= caught_exception.user_agent %></td>
+                </tr>
+                <tr>
+                  <td><%= model_class.human_attribute_name(:server_name) %></td>
+                  <td><%= caught_exception.server_name %></td>
+                </tr>
+                <tr>
+                  <td><%= model_class.human_attribute_name(:server_port) %></td>
+                  <td><%= caught_exception.server_port %></td>
+                </tr>
+                <tr>
+                  <td><%= model_class.human_attribute_name(:remote_address) %></td>
+                  <td><%= caught_exception.remote_address %></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </td>
+        <script type="text/javascript" charset="utf-8">
+          var editorBacktraces = ace.edit("editor-backtraces-<%= caught_exception._id %>"),
+              editorSession    = ace.edit("editor-session-<%= caught_exception._id %>"),
+              editorParams     = ace.edit("editor-params-<%= caught_exception._id %>");
+
+          editorBacktraces.setTheme("ace/theme/twilight");
+          editorBacktraces.session.setMode("ace/mode/json");
+          editorBacktraces.setReadOnly(true);
+          editorBacktraces.getSession().setValue(JSON.stringify(<%= raw caught_exception.backtraces.to_json %>, null, '\t'));
+
+          editorSession.setTheme("ace/theme/twilight");
+          editorSession.session.setMode("ace/mode/json");
+          editorSession.setReadOnly(true);
+          editorSession.getSession().setValue(JSON.stringify(<%= raw caught_exception.session.to_json %>, null, '\t'));
+
+          editorParams.setTheme("ace/theme/twilight");
+          editorParams.session.setMode("ace/mode/json");
+          editorParams.setReadOnly(true);
+          editorParams.getSession().setValue(JSON.stringify(<%= raw caught_exception.params.to_json %>, null, '\t'));
+
+          $("#show-button-<%= caught_exception._id %>").click(function() {
+            if ($("#content-<%= caught_exception._id %>").css('display') == 'none'){
+              $(this).text("Hide");
+            } else {
+              $(this).text("Show");
+            }
+            $("#content-<%= caught_exception._id %>").toggle();
+          });
+        </script>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= paginate @caught_exceptions %>

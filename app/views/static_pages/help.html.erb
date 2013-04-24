@@ -1,0 +1,46 @@
+<h1>Help</h1>
+<h3>Search Text</h3>
+<dl>
+  <dt>Extact Search (column_name= search text)</dt>
+  <dd>This will match fields in the column with this text extactly. For the column error_class, "StandardError",<br>
+      is a common error. To find all exceptions which match the search would look like this:
+      <div class="well">
+        error_class= StandardError
+      </div>
+  </dd>
+  <dt>Like Search (column_name* search text)</dt>
+  <dd>This will match fields in the column with this text anywhere in the field. For the column backtrace, "file.rb",<br>
+      might be in the field. To find all exceptions which match the search would look like this:
+      <div class="well">
+        error_class* StandardError
+      </div>
+  </dd>
+  <dt>gte (column_name>= date)</dt>
+  <dd>This will match fields in the column with dates that are greater than or equal to the <code>DateTime</code> provided.<br>
+      The only useful column here is created_at. To find all exceptions which match the search would look like this:
+      <div class="well">
+        column_name>= 2013-04-24 07:40:30
+      </div>
+  </dd>
+  <dt>lte (column_name<= date)</dt>
+  <dd>This will match fields in the column with dates that are less than or equal to the <code>DateTime</code> provided.<br>
+      The only useful column here is created_at. To find all exceptions which match the search would look like this:
+      <div class="well">
+        error_class<= 2013-04-24 07:40:30
+      </div>
+  </dd>
+  <dt>gt (column_name> date)</dt>
+  <dd>This will match fields in the column with dates that are greater the <code>DateTime</code> provided.<br>
+      The only useful column here is created_at. To find all exceptions which match the search would look like this:
+      <div class="well">
+        error_class> 2013-04-24 07:40:30
+      </div>
+  </dd>
+  <dt>lte (column_name> date)</dt>
+  <dd>This will match fields in the column with dates that are less the <code>DateTime</code> provided.<br>
+      The only useful column here is created_at. To find all exceptions which match the search would look like this:
+      <div class="well">
+        error_class> 2013-04-24 07:40:30
+      </div>
+  </dd>
+</dl>
