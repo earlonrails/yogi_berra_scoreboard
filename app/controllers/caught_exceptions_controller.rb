@@ -18,8 +18,13 @@ class CaughtExceptionsController < ApplicationController
       end
       @caught_exceptions = additive_query.page(params[:page]).per(10)
     else
-      @caught_exceptions = CaughtException.page(params[:page]).per(10)
+      @caught_exceptions = if params[:project]
+        CaughtException.where(:project => params[:project]).page(params[:page]).per(10)
+      else
+        CaughtException.page(params[:page]).per(10)
+      end
     end
+    @projects = @caught_exceptions.collect(&:project).uniq.compact
 
     respond_to do |format|
       format.html # index.html.erb

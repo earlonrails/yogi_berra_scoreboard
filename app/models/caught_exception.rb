@@ -12,6 +12,8 @@ class CaughtException
   field :server_name, type: String
   field :server_port, type: String
   field :remote_address, type: String
+  field :project, type: String
+
 
   scope :gt, lambda { |column, value| where(:created_at => { '$gt' => value }) if value }
   scope :lt, lambda { |column, value| where(:created_at => { '$lt' => value }) if value }

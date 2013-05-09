@@ -1,12 +1,35 @@
 <%- model_class = CaughtException -%>
-<div class="page-header">
-  <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
+<br />
+<div class="navbar">
+  <div class="navbar-inner">
+    <a class="brand" href="#">
+      <%=t '.title', :default => model_class.model_name.titlecase.pluralize %>
+      <% if params[:project] %>
+        - <%= params[:project].titlecase %>
+      <% end %>
+    </a>
+    <ul class="nav">
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          Projects
+          <b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu">
+          <li><%= link_to "All", root_path %></li>
+          <% @projects.each do |project| %>
+            <li><a href="?project=pay"><%= project.titlecase %></a></li>
+          <% end %>
+        </ul>
+    </ul>
+  </div>
 </div>
-
 <table class="table table-striped table-hover table-bordered">
   <tbody>
     <% @caught_exceptions.each do |caught_exception| %>
       <tr>
+        <% unless params[:project] %>
+          <td><%= caught_exception.project.to_s.titlecase %></td>
+        <% end %>
         <td>
           <%=l caught_exception.created_at, :format => :long %>
           <span class="label label-warning"><%= caught_exception.error_class %></span>
