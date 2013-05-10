@@ -35,11 +35,11 @@
           <span class="label label-warning"><%= caught_exception.error_class %></span>
           <%= caught_exception.error_message %>
         </td>
-        <td class='editor-column'>
+        <td>
           <div>
             <button id="show-button-<%= caught_exception._id %>" class="btn btn-info">Show</button>
           </div>
-          <div id="content-<%= caught_exception._id %>" style="display:none">
+          <div id="content-<%= caught_exception._id %>" class='information-container' style="display:none">
             <div class="well">
               <%= model_class.human_attribute_name(:backtraces) %>
               <div class="editor" id="editor-backtraces-<%= caught_exception._id %>"></div>
