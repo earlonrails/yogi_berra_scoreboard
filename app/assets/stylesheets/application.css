@@ -13,6 +13,10 @@
  *= require twitter/bootstrap
  */
 
+
+.editor-column {
+  width:500px;
+}
 .table-nonfluid {
   width: 500px;
   margin: 0px auto;
