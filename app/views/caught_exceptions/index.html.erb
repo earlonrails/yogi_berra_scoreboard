@@ -26,7 +26,7 @@
 <table class="table table-striped table-hover table-bordered">
   <tbody>
     <% @caught_exceptions.each do |caught_exception| %>
-      <tr>
+      <tr id='<%= caught_exception.id %>'>
         <% unless params[:project] %>
           <td><%= caught_exception.project.to_s.titlecase %></td>
         <% end %>
@@ -38,6 +38,7 @@
         <td>
           <div>
             <button id="show-button-<%= caught_exception._id %>" class="btn btn-info">Show</button>
+            <button class="btn btn-danger" onclick="dismissError('<%= caught_exception.id %>')">Dismiss</button>
           </div>
           <div id="content-<%= caught_exception._id %>" class='information-container' style="display:none">
             <div class="well">

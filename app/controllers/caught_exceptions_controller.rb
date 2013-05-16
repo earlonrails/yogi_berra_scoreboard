@@ -19,9 +19,9 @@ class CaughtExceptionsController < ApplicationController
       @caught_exceptions = additive_query.page(params[:page]).per(10)
     else
       @caught_exceptions = if params[:project]
-        CaughtException.where(:project => params[:project]).page(params[:page]).per(10)
+        CaughtException.where(:dismissed.ne => true, :project => params[:project]).page(params[:page]).per(10)
       else
-        CaughtException.page(params[:page]).per(10)
+        CaughtException.where(:dismissed.ne => true).page(params[:page]).per(10)
       end
     end
     @projects = @caught_exceptions.collect(&:project).uniq.compact
@@ -30,6 +30,16 @@ class CaughtExceptionsController < ApplicationController
       format.html # index.html.erb
       format.json { render json: @caught_exceptions }
     end
+  end
+
+  def dismiss 
+   caught_exception = CaughtException.find(params[:error_id])
+   if caught_exception 
+      caught_exception.update_attribute(:dismissed, true)
+      render json: { success: true } 
+   else 
+      render json: { success: false } 
+   end
   end
 
   # GET /caught_exceptions/1
