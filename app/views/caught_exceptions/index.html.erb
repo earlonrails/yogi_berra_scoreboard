@@ -40,7 +40,7 @@
             <button id="show-button-<%= caught_exception._id %>" class="btn btn-info">Show</button>
             <button class="btn btn-danger" onclick="dismissError('<%= caught_exception.id %>')">Dismiss</button>
           </div>
-          <div id="content-<%= caught_exception._id %>" class='information-container' style="display:none">
+          <div id="content-<%= caught_exception._id %>" style="display:none">
             <div class="well">
               <%= model_class.human_attribute_name(:backtraces) %>
               <div class="editor" id="editor-backtraces-<%= caught_exception._id %>"></div>

@@ -13,11 +13,6 @@
  *= require twitter/bootstrap
  */
 
-
-.information-container {
-  width:500px;
-}
-
 .table-nonfluid {
   width:500px;
   margin: 0px auto;
