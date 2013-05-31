@@ -13,7 +13,7 @@ class CaughtException
   field :server_port, type: String
   field :remote_address, type: String
   field :project, type: String
-  field :dismissed, type: String
+  field :dismissed, type: Boolean
 
 
   scope :gt, lambda { |column, value| where(:created_at => { '$gt' => value }) if value }
