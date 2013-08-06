@@ -21,6 +21,8 @@
 
 .editor {
   position: relative;
-  height: 150px;
+  height: 18em;
   margin: 5px;
+  width: 76em;
 }
+
