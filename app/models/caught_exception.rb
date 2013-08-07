@@ -23,7 +23,7 @@ class CaughtException
   scope :lte, lambda { |column, value| where(:created_at => { '$lte' => value }) if value }
 
   scope :extactly, lambda { |column, value| where(column.to_sym => value) if column && value }
-  scope :like, lambda { |column, value| where(column.to_s => /.*#{value}.*/) if column && value }
+  scope :like, lambda { |column, value| where(column.to_s => /.*#{value}.*/i) if column && value }
 
   def self.search(query)
     if query.blank?
