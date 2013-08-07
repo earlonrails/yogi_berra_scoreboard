@@ -24,7 +24,7 @@ class CaughtExceptionsController < ApplicationController
         CaughtException.where(:dismissed.ne => true).page(params[:page]).per(10)
       end
     end
-    @projects = @caught_exceptions.collect(&:project).uniq.compact
+    @projects = CaughtException.all.distinct(:project)
 
     respond_to do |format|
       format.html # index.html.erb
