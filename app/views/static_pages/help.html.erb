@@ -44,3 +44,12 @@
       </div>
   </dd>
 </dl>
+
+<h3>Possible Columns</h3>
+<div class="well">
+  <% CaughtException.fields.each do |field| %>
+    <p>
+      <%= field.first %>
+    </p>
+  <% end %>
+</div>
