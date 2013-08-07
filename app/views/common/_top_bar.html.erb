@@ -7,7 +7,7 @@
       </ul>
       <ul class="nav pull-right">
         <form class="form-search" action="/">
-          <input name="search_text" type="text" class="input-medium search-query" placeholder="class= class_name">
+          <%= text_field_tag "search_text", @search_text_value, :class => "input-medium search-query", :placeholder => "class= class_name" %>
           <button type="submit" class="btn">Search</button>
         </form>
       </ul>

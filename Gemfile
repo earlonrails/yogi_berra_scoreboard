@@ -1,9 +1,9 @@
 source 'https://rubygems.org'
 
 gem 'rails', '3.2.13'
-gem 'bson', '1.8.5'
-gem 'bson_ext', '1.2.4', :platform => :ruby
-gem 'mongo', '1.1.5'
+gem 'bson'
+gem 'bson_ext', :platform => :ruby
+gem 'mongo'
 gem 'mongoid', '~> 3.1.2'
 gem 'jquery-rails', '2.2.1'
 gem 'kaminari', '0.14.1'

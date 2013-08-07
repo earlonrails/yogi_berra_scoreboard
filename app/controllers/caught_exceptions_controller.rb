@@ -5,7 +5,9 @@ class CaughtExceptionsController < ApplicationController
   # GET /caught_exceptions
   # GET /caught_exceptions.json
   def index
-    search_text = params[:search_text]
+    # @search_text_value = nil if params[:reset]
+    search_text = (params[:search_text] || "")
+    @search_text_value = search_text.dup
     if search_text.present?
       search_array = parse_search_text(search_text)
       additive_query = nil
