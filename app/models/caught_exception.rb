@@ -15,6 +15,7 @@ class CaughtException
   field :project, type: String
   field :dismissed, type: Boolean
 
+  index({created_at: 1})
 
   scope :gt, lambda { |column, value| where(:created_at => { '$gt' => value }) if value }
   scope :lt, lambda { |column, value| where(:created_at => { '$lt' => value }) if value }
