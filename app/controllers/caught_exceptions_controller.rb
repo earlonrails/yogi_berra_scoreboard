@@ -8,6 +8,7 @@ class CaughtExceptionsController < ApplicationController
     # @search_text_value = nil if params[:reset]
     search_text = (params[:search_text] || "")
     @search_text_value = search_text.dup
+    @caught_exceptions = CaughtException.where(:dismissed.ne => true)
     if search_text.present?
       search_array = parse_search_text(search_text)
       additive_query = nil
@@ -18,14 +19,11 @@ class CaughtExceptionsController < ApplicationController
           additive_query = CaughtException.send(element[:type], element[:field], element[:query])
         end
       end
-      @caught_exceptions = additive_query.page(params[:page]).per(10)
-    else
-      @caught_exceptions = if params[:project]
-        CaughtException.where(:dismissed.ne => true, :project => params[:project]).page(params[:page]).per(10)
-      else
-        CaughtException.where(:dismissed.ne => true).page(params[:page]).per(10)
-      end
+      @caught_exceptions = additive_query.merge(@caught_exceptions)
     end
+
+    @caught_exceptions = @caught_exceptions.where(:project => params[:project]) if params[:project]
+    @caught_exceptions = @caught_exceptions.order_by(:created_at => :desc).page(params[:page]).per(15)
     @projects = CaughtException.all.distinct(:project)
 
     respond_to do |format|
