@@ -1,6 +1,5 @@
 Yogi Berra Scoreboard
 =====================
-
 This is the rails app which allows you to view and search
 for the exceptions caught by https://github.com/earlonrails/yogi_berra gem.
 
@@ -90,3 +89,8 @@ clone, bundle, and point the mongoid.yml to your mongodb database. ex.
             max_retries: 1
             retry_interval: 0
 
+
+Create Index
+------------
+
+    db.caught_exceptions.ensureIndex({"created_at": 1})
