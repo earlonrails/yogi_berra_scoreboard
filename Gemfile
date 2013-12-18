@@ -5,8 +5,10 @@ gem 'bson'
 gem 'bson_ext', :platform => :ruby
 gem 'mongo'
 gem 'mongoid', '~> 3.1.2'
-gem 'jquery-rails', '2.2.1'
-gem 'kaminari', '0.14.1'
+gem 'qu-mongo'
+gem 'jquery-rails', '3.0.4'
+gem 'kaminari', '0.15.0'
+gem 'bootstrap-kaminari-views'
 gem 'puma', :platform => :jruby
 
 group :assets do
@@ -14,8 +16,8 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
   gem 'therubyrhino', :platform => :jruby
   gem 'therubyracer', :platform => :ruby
-  gem 'less-rails-bootstrap', '2.3.2'
-  gem 'twitter-bootstrap-rails', '2.2.6'
+  gem 'less-rails-bootstrap', '3.0.4'
+  gem 'twitter-bootstrap-rails', github: 'seyhunak/twitter-bootstrap-rails', branch: 'bootstrap3'
 end
 
 group :test do

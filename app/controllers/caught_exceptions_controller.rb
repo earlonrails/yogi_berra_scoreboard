@@ -52,4 +52,13 @@ class CaughtExceptionsController < ApplicationController
       format.json { render json: @caught_exception }
     end
   end
+
+  def heat_map
+    @map_reduced_caught_exceptions = CaughtException.group_by_error_message
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @caught_exceptions }
+    end
+  end
 end

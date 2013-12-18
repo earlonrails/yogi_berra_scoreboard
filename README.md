@@ -94,3 +94,8 @@ Create Index
 ------------
 
     db.caught_exceptions.ensureIndex({"created_at": 1})
+    /*
+     * optional TTL
+     * 2592000 - after one month delete record
+     * db.caught_exceptions.ensureIndex({"created_at": 1}, { expireAfterSeconds: 2592000 } )
+     */

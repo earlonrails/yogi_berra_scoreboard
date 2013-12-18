@@ -23,6 +23,13 @@
   position: relative;
   height: 18em;
   margin: 5px;
-  width: 76em;
+  width: 99%;
 }
 
+.error-summary-box {
+  width: 80%;
+}
+
+.search-field {
+  padding: 9% 3%;
+}

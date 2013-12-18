@@ -14,6 +14,7 @@ class CaughtException
   field :remote_address, type: String
   field :project, type: String
   field :dismissed, type: Boolean
+  field :controller, type: Hash
 
   index({created_at: 1})
 
@@ -26,25 +27,47 @@ class CaughtException
   scope :extactly, lambda { |column, value| where(column.to_sym => value) if column && value }
   scope :like, lambda { |column, value| where(column.to_s => /.*#{value}.*/i) if column && value }
 
-  def self.search(query)
-    if query.blank?
-      scoped
-    else
-      sql = query.split.map do |word|
-        %w[first_name last_name].map do |column|
-        sanitize_sql ["#{column} LIKE ?", "%#{word}%"]
-        end.join(" or ")
-      end.join(") and (")
-      where("(#{sql})")
+  def self.group_by_error_message
+    map = %Q{
+      function() {
+        emit(this.error_message, { count: 1, date: this.created_at, id: this._id });
+      }
+    }
+
+    reduce = %Q{
+      function(key, values) {
+        var result = {count: 0, dates: [], ids: []};
+        values.forEach(function(value){
+          if (value.date) {
+            result.count += value.count;
+            result.dates.push(value.date.valueOf());
+            result.ids.push(value.id)
+          }
+        });
+        return result;
+      }
+    }
+    where(:error_message => {'$exists' => true, '$ne' => ""}).map_reduce(map, reduce).out(inline: true).sort_by do |message|
+      message["value"]["count"] = message["value"]["count"].to_i
+      -message["value"]["count"]
     end
   end
 
-  def self.search_w_hash(hash)
-    sql = query.split.map do |word|
-      %w[first_name last_name].map do |column|
-      sanitize_sql ["#{column} LIKE ?", "%#{word}%"]
-      end.join(" or ")
-    end.join(") and (")
-    where("(#{sql})")
+  def error_title
+    title = ""
+    if controller
+      title = "#{controller['name']}##{controller['action']}"
+    elsif params['controller']
+      title = "#{params['controller']}##{params['action']}"
+    end
+    "#{title} Line: #{line_number} #{created_at.strftime('%m/%d/%Y %X')}"
+  end
+
+  def first_line
+    backtraces.first
+  end
+
+  def line_number
+    first_line[/\:\d+\:/][1..-2]
   end
 end
