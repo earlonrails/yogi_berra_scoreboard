@@ -1,0 +1,130 @@
+<% @caught_exceptions.each do |caught_exception| %>
+  <div id='<%= caught_exception.id %>' class="panel panel-warning">
+    <div class="panel-heading">
+      <h3 class="panel-title">
+        <%= h(caught_exception.error_title) %>
+      </h3>
+    </div>
+    <div class="panel-body error-summary-box">
+      <table class="table table-striped table-hover table-condensed table-bordered">
+        <tbody>
+          <tr>
+            <td>
+              Error Class
+            </td>
+            <td>
+              <%= caught_exception.error_class %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Error Message
+            </td>
+            <td>
+              <%= caught_exception.error_message %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              First Line
+            </td>
+            <td>
+              <%= caught_exception.first_line %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Server Address
+            </td>
+            <td>
+              <%= caught_exception.server_address %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              User Agent
+            </td>
+            <td>
+              <%= caught_exception.user_agent %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Server Name
+            </td>
+            <td>
+              <%= caught_exception.server_name %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Server Port
+            </td>
+            <td>
+              <%= caught_exception.server_port %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Remote Address
+            </td>
+            <td>
+              <%= caught_exception.remote_address %>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div style="padding-top: 5px">
+        <button id="show-button-<%= caught_exception._id %>" class="btn btn-info">Show</button>
+        <button class="btn btn-danger" onclick="dismissError('<%= caught_exception.id %>')">Dismiss</button>
+      </div>
+      <br>
+
+      <div id="content-<%= caught_exception._id %>" style="display:none;">
+        <div class="well">
+          Backtraces
+          <div class="editor" id="editor-backtraces-<%= caught_exception._id %>"></div>
+        </div>
+        <div class="well">
+          Session
+          <div class="editor" id="editor-session-<%= caught_exception._id %>"></div>
+        </div>
+        <div class="well">
+          Params
+          <div class="editor" id="editor-params-<%= caught_exception._id %>"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript" charset="utf-8">
+    var editorBacktraces = ace.edit("editor-backtraces-<%= caught_exception._id %>"),
+        editorSession    = ace.edit("editor-session-<%= caught_exception._id %>"),
+        editorParams     = ace.edit("editor-params-<%= caught_exception._id %>");
+
+    editorBacktraces.setTheme("ace/theme/twilight");
+    editorBacktraces.session.setMode("ace/mode/json");
+    editorBacktraces.setReadOnly(true);
+    editorBacktraces.getSession().setValue(JSON.stringify(<%= raw caught_exception.backtraces.to_json %>, null, '\t'));
+
+    editorSession.setTheme("ace/theme/twilight");
+    editorSession.session.setMode("ace/mode/json");
+    editorSession.setReadOnly(true);
+    editorSession.getSession().setValue(JSON.stringify(<%= raw caught_exception.session.to_json %>, null, '\t'));
+
+    editorParams.setTheme("ace/theme/twilight");
+    editorParams.session.setMode("ace/mode/json");
+    editorParams.setReadOnly(true);
+    editorParams.getSession().setValue(JSON.stringify(<%= raw caught_exception.params.to_json %>, null, '\t'));
+
+    $("#show-button-<%= caught_exception._id %>").click(function() {
+      if ($("#content-<%= caught_exception._id %>").css('display') == 'none'){
+        $(this).text("Hide");
+      } else {
+        $(this).text("Show");
+      }
+      $("#content-<%= caught_exception._id %>").toggle();
+    });
+  </script>
+<% end %>
+<%= paginate @caught_exceptions, :theme => 'twitter-bootstrap-3' %>

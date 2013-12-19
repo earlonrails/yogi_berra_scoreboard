@@ -53,8 +53,19 @@ class CaughtExceptionsController < ApplicationController
     end
   end
 
+  def many_exceptions
+    line_one = params[:line_one]
+    @caught_exceptions = CaughtException.in(:backtraces => [line_one]).order_by(:created_at => :desc).page(params[:page]).per(15)
+    @projects = CaughtException.all.distinct(:project)
+
+    respond_to do |format|
+      format.html # show.html.erb
+      format.json { render json: @caught_exceptions }
+    end
+  end
+
   def heat_map
-    @map_reduced_caught_exceptions = CaughtException.group_by_error_message
+    @map_reduced_caught_exceptions = CaughtException.group_by_first_line
 
     respond_to do |format|
       format.html # index.html.erb

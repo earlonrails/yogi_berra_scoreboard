@@ -53,6 +53,43 @@ class CaughtException
     end
   end
 
+  def self.group_by_first_line
+    map = %Q{
+      function() {
+        emit(this.backtraces[0], { count: 1, date: this.created_at, id: this._id, remote_address: this.remote_address, user_agent: this.user_agent });
+      }
+    }
+
+    reduce = %Q{
+      function(key, values) {
+        var result = {count: 0, dates: [], ids: [], agents: {}, ips: {}};
+        values.forEach(function(value){
+          if (value.date) {
+            result.count += value.count;
+            result.dates.push(value.date.valueOf());
+            result.ids.push(value.id);
+            if (result.ips.hasOwnProperty(value.remote_address)) {
+              result.ips[value.remote_address] += 1
+            } else {
+              result.ips[value.remote_address] = 1
+            }
+
+            if (result.agents.hasOwnProperty(value.user_agent)) {
+              result.agents[value.user_agent] += 1
+            } else {
+              result.agents[value.user_agent] = 1
+            }
+          }
+        });
+        return result;
+      }
+    }
+    where(:error_message => {'$exists' => true, '$ne' => ""}).map_reduce(map, reduce).out(inline: true).sort_by do |message|
+      message["value"]["count"] = message["value"]["count"].to_i
+      -message["value"]["count"]
+    end
+  end
+
   def error_title
     title = ""
     if controller
