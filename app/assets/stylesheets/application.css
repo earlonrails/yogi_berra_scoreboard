@@ -33,3 +33,20 @@
 .search-field {
   padding: 9% 3%;
 }
+
+.borderless td {
+  border: none !important;
+}
+
+textarea {
+  resize: none;
+}
+
+.mongo-query-box {
+  width: 500px;
+  height: 150px;
+}
+
+.query-adder {
+  cursor: pointer;
+}

@@ -1,6 +1,8 @@
-class ProcessPresentation
-  def self.perform(presentation_id)
-    presentation = Presentation.find(presentation_id)
-    presentation.process!
+class Email
+  def self.perform(project_id)
+    project = ProjectConfiguration.find(project_id)
+    project.thresholds.each do |threshold|
+
+    end
   end
 end

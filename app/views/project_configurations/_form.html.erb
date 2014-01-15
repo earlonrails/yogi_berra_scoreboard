@@ -1,14 +1,106 @@
-<%= form_for @project_configuration, :html => { :class => 'form-horizontal' } do |f| %>
-  <div class="control-group">
-    <%= f.label :project_name, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :project_name, :class => 'text_field' %>
-    </div>
-  </div>
+<H1>Example</H1>
+<table class="table table-striped table-hover table-condensed table-bordered">
+  <tbody>
+    <tr class="query-adder" data-query-part="error_class">
+      <td>
+        <span class="glyphicon glyphicon-plus"></span>
+      </td>
+      <td>
+        Error Class
+      </td>
+      <td>
+        <%= @example.error_class %>
+      </td>
+    </tr>
+    <tr class="query-adder" data-query-part="error_message">
+      <td>
+        <span class="glyphicon glyphicon-plus"></span>
+      </td>
+      <td>
+        Error Message
+      </td>
+      <td>
+        <%= @example.error_message %>
+      </td>
+    </tr>
+    <tr class="query-adder" data-query-part="backtraces">
+      <td>
+        <span class="glyphicon glyphicon-plus"></span>
+      </td>
+      <td>
+        First Line
+      </td>
+      <td>
+        <%= @example.first_line %>
+      </td>
+    </tr>
+    <tr class="query-adder" data-query-part="server_address">
+      <td>
+        <span class="glyphicon glyphicon-plus"></span>
+      </td>
+      <td>
+        Server Address
+      </td>
+      <td>
+        <%= @example.server_address %>
+      </td>
+    </tr>
+    <tr class="query-adder" data-query-part="user_agent">
+      <td>
+        <span class="glyphicon glyphicon-plus"></span>
+      </td>
+      <td>
+        User Agent
+      </td>
+      <td>
+        <%= @example.user_agent %>
+      </td>
+    </tr>
+    <tr class="query-adder" data-query-part="server_name">
+      <td>
+        <span class="glyphicon glyphicon-plus"></span>
+      </td>
+      <td>
+        Server Name
+      </td>
+      <td>
+        <%= @example.server_name %>
+      </td>
+    </tr>
+    <tr class="query-adder" data-query-part="remote_address">
+      <td>
+        <span class="glyphicon glyphicon-plus"></span>
+      </td>
+      <td>
+        Remote Address
+      </td>
+      <td>
+        <%= @example.remote_address %>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
 
-  <div class="form-actions">
-    <%= f.submit nil, :class => 'btn btn-primary' %>
-    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                project_configurations_path, :class => 'btn' %>
+<%= form_tag project_configuration_path, :method => "put", :class => 'form-horizontal', :role => 'form' do |f| %>
+  <div class="form-group">
+    <label>Raw Query</label>
+    <br>
+    <%= text_area_tag :raw_query, "Enter mongo query ...", :class => "mongo-query-box" %>
+    <button type="button" class="btn btn-default query-clear">
+      Clear
+    </button>
+    <button type="button" class="btn btn-default query-test">
+      Test Query
+    </button>
+    <br>
+    <label>Number of occurrences</label>
+    <br>
+    <%= text_field_tag :limit %>
+    <br>
+    <%= submit_tag "Save", :class => 'btn btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")), project_configurations_path, :class => 'btn btn-default' %>
   </div>
 <% end %>
+
+<div class="editor" id="query-return" style="display:none;"></div>

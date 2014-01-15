@@ -94,7 +94,7 @@ class CaughtException
     title = ""
     if controller
       title = "#{controller['name']}##{controller['action']}"
-    elsif params['controller']
+    elsif params && params['controller']
       title = "#{params['controller']}##{params['action']}"
     end
     "#{title} Line: #{line_number} #{created_at.strftime('%m/%d/%Y %X')}"
@@ -105,6 +105,6 @@ class CaughtException
   end
 
   def line_number
-    first_line[/\:\d+\:/][1..-2]
+    first_line[/\:\d+\:/] ? first_line[/\:\d+\:/][1..-2] : ""
   end
 end

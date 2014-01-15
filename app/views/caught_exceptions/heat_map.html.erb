@@ -1,110 +1,108 @@
-<div class="container">
-  <% @map_reduced_caught_exceptions.each_with_index do |caught_exception, index| %>
-    <div class="panel panel-warning">
-      <div class="panel-heading">
-        <h3 class="panel-title">
-          <a href="/many_exceptions?line_one=<%= caught_exception["_id"] %>">
-            <button class="btn btn-warning btn-lg">
-              <span class="glyphicon glyphicon-fire"></span> <%= caught_exception["value"]["count"] %>
-            </button>
-          </a>
-          <span style="margin-left: 10px">
-            <%= caught_exception["_id"] %>
-          </span>
-        </h3>
-      </div>
-      <div class="panel-body error-summary-box">
-        <div class="row">
-          <div class="col-xs-6">
-            <div class="panel panel-default">
-              <div class="panel-heading">User Agents</div>
-              <table class="table">
-                <% if caught_exception["value"]["agents"] %>
-                  <% caught_exception["value"]["agents"].each do |key, value| %>
-                    <tr>
-                      <td>
-                        <%= key %>
-                      </td>
-                      <td>
-                        <span class="pull-right badge"><%= value.to_i %></span>
-                      </td>
-                    </tr>
-                  <% end %>
+<% @map_reduced_caught_exceptions.each_with_index do |caught_exception, index| %>
+  <div class="panel panel-warning">
+    <div class="panel-heading">
+      <h3 class="panel-title">
+        <a href="/many_exceptions?line_one=<%= caught_exception["_id"] %>">
+          <button class="btn btn-warning btn-lg">
+            <span class="glyphicon glyphicon-fire"></span> <%= caught_exception["value"]["count"] %>
+          </button>
+        </a>
+        <span style="margin-left: 10px">
+          <%= caught_exception["_id"] %>
+        </span>
+      </h3>
+    </div>
+    <div class="panel-body error-summary-box">
+      <div class="row">
+        <div class="col-xs-6">
+          <div class="panel panel-default">
+            <div class="panel-heading">User Agents</div>
+            <table class="table">
+              <% if caught_exception["value"]["agents"] %>
+                <% caught_exception["value"]["agents"].each do |key, value| %>
+                  <tr>
+                    <td>
+                      <%= key %>
+                    </td>
+                    <td>
+                      <span class="pull-right badge"><%= value.to_i %></span>
+                    </td>
+                  </tr>
                 <% end %>
-              </table>
-            </div>
-
-            <div class="panel panel-default">
-              <div class="panel-heading">Remote Addresses</div>
-              <table class="table">
-                <% if caught_exception["value"]["ips"] %>
-                  <% caught_exception["value"]["ips"].each do |key, value| %>
-                    <tr>
-                      <td>
-                        <%= key %>
-                      </td>
-                      <td>
-                        <span class="pull-right badge"><%= value.to_i %></span>
-                      </td>
-                    </tr>
-                  <% end %>
-                <% end %>
-              </table>
-            </div>
+              <% end %>
+            </table>
           </div>
-          <div class="col-xs-6">
-              <div id="caught_exception_chart<%= index %>" style="width:400px;height:200px"></div>
 
-              <script type="text/javascript">
-                var dates = <%= raw caught_exception["value"]["dates"] %>;
-                var dateCounter = function(dates) {
-                  var results = {};
-                  dates.forEach(function(date){
-                    date = new Date(date);
-                    var dateString = date.getDay() + "/" + date.getMonth() + "/" + date.getFullYear();
-                    if (results.hasOwnProperty(dateString)) {
-                      results[dateString] += 1;
-                    } else {
-                      results[dateString] = 0;
-                    }
-                  });
-
-                  results["dateLabels"] = Object.keys(results);
-                  results["countArray"] = [];
-                  results.dateLabels.forEach(function(key){
-                    results.countArray.push(results[key]);
-                  });
-                  return results;
-                };
-
-                var dateResults = dateCounter(dates);
-                $("#caught_exception_chart<%= index %>").highcharts({
-                  chart: {
-                   type: 'column'
-                  },
-                  title: {
-                    text: ""
-                  },
-                  xAxis: {
-                    categories: dateResults.dateLabels
-                  },
-                  yAxis: {
-                    min: 0,
-                    title: {
-                        text: 'Number of errors'
-                    }
-                  },
-                  colors: ['#f0ad4e'],
-                  series: [{
-                    data: dateResults.countArray,
-                    showInLegend: false
-                  }]
-                })
-              </script>
-            </div>
+          <div class="panel panel-default">
+            <div class="panel-heading">Remote Addresses</div>
+            <table class="table">
+              <% if caught_exception["value"]["ips"] %>
+                <% caught_exception["value"]["ips"].each do |key, value| %>
+                  <tr>
+                    <td>
+                      <%= key %>
+                    </td>
+                    <td>
+                      <span class="pull-right badge"><%= value.to_i %></span>
+                    </td>
+                  </tr>
+                <% end %>
+              <% end %>
+            </table>
           </div>
         </div>
+        <div class="col-xs-6">
+            <div id="caught_exception_chart<%= index %>" style="width:400px;height:200px"></div>
 
-    </div>
-  <% end %>
-</div>
+            <script type="text/javascript">
+              var dates = <%= raw caught_exception["value"]["dates"] %>;
+              var dateCounter = function(dates) {
+                var results = {};
+                dates.forEach(function(date){
+                  date = new Date(date);
+                  var dateString = date.getDay() + "/" + date.getMonth() + "/" + date.getFullYear();
+                  if (results.hasOwnProperty(dateString)) {
+                    results[dateString] += 1;
+                  } else {
+                    results[dateString] = 0;
+                  }
+                });
+
+                results["dateLabels"] = Object.keys(results);
+                results["countArray"] = [];
+                results.dateLabels.forEach(function(key){
+                  results.countArray.push(results[key]);
+                });
+                return results;
+              };
+
+              var dateResults = dateCounter(dates);
+              $("#caught_exception_chart<%= index %>").highcharts({
+                chart: {
+                 type: 'column'
+                },
+                title: {
+                  text: ""
+                },
+                xAxis: {
+                  categories: dateResults.dateLabels
+                },
+                yAxis: {
+                  min: 0,
+                  title: {
+                      text: 'Number of errors'
+                  }
+                },
+                colors: ['#f0ad4e'],
+                series: [{
+                  data: dateResults.countArray,
+                  showInLegend: false
+                }]
+              })
+            </script>
+          </div>
+        </div>
+      </div>
+
+  </div>
+<% end %>

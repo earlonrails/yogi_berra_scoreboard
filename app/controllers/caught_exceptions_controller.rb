@@ -64,6 +64,18 @@ class CaughtExceptionsController < ApplicationController
     end
   end
 
+  def raw_query
+    query = JSON.parse(params[:query])
+    @caught_exceptions = CaughtException.where(query)
+    @projects = CaughtException.all.distinct(:project)
+
+    respond_to do |format|
+      format.html # show.html.erb
+      format.json { render json: @caught_exceptions }
+    end
+  end
+
+
   def heat_map
     @map_reduced_caught_exceptions = CaughtException.group_by_first_line
 
