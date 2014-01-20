@@ -1,8 +1,12 @@
+<% @caught_exceptions ||= defined?(caught_exceptions) && caught_exceptions ? caught_exceptions : [] %>
 <% @caught_exceptions.each do |caught_exception| %>
   <div id='<%= caught_exception.id %>' class="panel panel-warning">
     <div class="panel-heading">
       <h3 class="panel-title">
-        <%= h(caught_exception.error_title) %>
+        <%= link_to caught_exception_path(caught_exception) do %>
+          <%= h(caught_exception.error_title) %>
+          <span class="glyphicon glyphicon-search"></span>
+        <% end %>
       </h3>
     </div>
     <div class="panel-body error-summary-box">
@@ -127,4 +131,4 @@
     });
   </script>
 <% end %>
-<%= paginate @caught_exceptions, :theme => 'twitter-bootstrap-3' %>
+<%= paginate @caught_exceptions, :theme => 'twitter-bootstrap-3' unless @caught_exceptions.is_a?(Array) %>

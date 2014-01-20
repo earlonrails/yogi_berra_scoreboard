@@ -66,11 +66,11 @@ class CaughtExceptionsController < ApplicationController
 
   def raw_query
     query = JSON.parse(params[:query])
-    @caught_exceptions = CaughtException.where(query)
+    @caught_exceptions = CaughtException.where(query).order_by(:created_at => :desc).page(params[:page]).per(15)
     @projects = CaughtException.all.distinct(:project)
 
     respond_to do |format|
-      format.html # show.html.erb
+      format.html { render :partial => 'exceptions', :locals => { :caught_exceptions => @caught_exceptions } }
       format.json { render json: @caught_exceptions }
     end
   end
