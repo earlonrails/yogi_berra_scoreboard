@@ -95,22 +95,24 @@
 
 <%= form_tag project_configuration_path, :method => "put", :class => 'form-horizontal', :role => 'form' do |f| %>
   <div class="form-group">
-    <label>Raw Query</label>
-    <br>
-    <%= text_area_tag :raw_query, "Enter mongo query ...", :class => "mongo-query-box" %>
-    <button type="button" class="btn btn-default query-clear">
-      Clear
-    </button>
-    <button type="button" class="btn btn-default query-test">
-      Test Query
-    </button>
-    <br>
-    <label>Number of occurrences</label>
-    <br>
-    <%= text_field_tag :limit %>
-    <br>
-    <%= submit_tag "Save", :class => 'btn btn-primary' %>
-    <%= link_to t('.cancel', :default => t("helpers.links.cancel")), project_configurations_path, :class => 'btn btn-default' %>
+    <label for="inputRawQuery" class="col-sm-2 control-label">Raw Query</label>
+    <%= text_area_tag :raw_query, "Enter mongo query ...", :class => "mongo-query-box form-control span6", :rows => "5", :cols => "20" %>
+  </div>
+  <div class="form-group">
+        <button type="button" class="btn btn-default query-clear">
+          Clear
+        </button>
+        <button type="button" class="btn btn-primary query-test">
+          Test Query
+        </button>
+
+        <label>Number of occurrences</label>
+        <br>
+        <%= text_field_tag :limit %>
+        <br>
+        <%= submit_tag "add", :class => 'btn btn-primary' %>
+        <%= link_to t('.cancel', :default => t("helpers.links.cancel")), project_configurations_path, :class => 'btn btn-default' %>
+
   </div>
 <% end %>
 
