@@ -2,7 +2,7 @@
   <div class="panel panel-warning">
     <div class="panel-heading">
       <h3 class="panel-title">
-        <a href="/many_exceptions?line_one=<%= caught_exception["_id"] %>">
+        <a href="/many_exceptions?line_one=<%= CGI::escape(caught_exception["_id"]) %>">
           <button class="btn btn-warning btn-lg">
             <span class="glyphicon glyphicon-fire"></span> <%= caught_exception["value"]["count"] %>
           </button>
