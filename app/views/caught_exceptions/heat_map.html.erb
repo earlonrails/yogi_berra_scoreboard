@@ -60,7 +60,7 @@
                 var results = {};
                 dates.forEach(function(date){
                   date = new Date(date);
-                  var dateString = date.getDay() + "/" + date.getMonth() + "/" + date.getFullYear();
+                  var dateString = date.getMonth() + 1 + "/" + date.getDay() + "/" + date.getFullYear();
                   if (results.hasOwnProperty(dateString)) {
                     results[dateString] += 1;
                   } else {
