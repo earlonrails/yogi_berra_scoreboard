@@ -18,14 +18,15 @@ class CaughtException
 
   index({created_at: 1})
 
-  scope :gt, lambda { |column, value| where(:created_at => { '$gt' => value }) if value }
-  scope :lt, lambda { |column, value| where(:created_at => { '$lt' => value }) if value }
+  def self.search(str, options={})
+    options[:limit] = options[:limit] || 50
+    # default limit: 50 (mongoDB default: 100)
 
-  scope :gte, lambda { |column, value| where(:created_at => { '$gte' => value }) if value }
-  scope :lte, lambda { |column, value| where(:created_at => { '$lte' => value }) if value }
+    res = self.mongo_session.command({ text: self.collection.name, search: str}.merge(options))
 
-  scope :extactly, lambda { |column, value| where(column.to_sym => value) if column && value }
-  scope :like, lambda { |column, value| where(column.to_s => /.*#{value}.*/i) if column && value }
+    # We shall now return a criteria of resulting objects!!
+    self.where(:id.in => res['results'].collect {|o| o['obj']['_id']})
+  end
 
   def self.group_by_error_message
     map = %Q{

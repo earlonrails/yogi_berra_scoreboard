@@ -89,13 +89,28 @@ clone, bundle, and point the mongoid.yml to your mongodb database. ex.
             max_retries: 1
             retry_interval: 0
 
+Full Text Search
+----------------
+Scoreboard is now using full text search with mongodb.
+To setup, in your mongodb.conf file: 
+
+    # enable full text search
+    setParameter=textSearchEnabled=true
+
+Then restart your mongod service.
+
 
 Create Index
 ------------
-
+    # for full text searching
+    db.caught_exceptions.ensureIndex({ "$**": "text" }, { name: "TextIndex" })
+    # for faster date range sorting
     db.caught_exceptions.ensureIndex({"created_at": 1})
     /*
      * optional TTL
      * 2592000 - after one month delete record
+     * db.caught_exceptions.ensureIndex({"created_at": 1}, { expireAfterSeconds: 2592000 } )
+     *
+     * alternate option Capped Collection
      * db.caught_exceptions.ensureIndex({"created_at": 1}, { expireAfterSeconds: 2592000 } )
      */

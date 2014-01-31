@@ -10,16 +10,7 @@ class CaughtExceptionsController < ApplicationController
     @search_text_value = search_text.dup
     @caught_exceptions = CaughtException.where(:dismissed.ne => true)
     if search_text.present?
-      search_array = parse_search_text(search_text)
-      additive_query = nil
-      search_array.each do |element|
-        if additive_query
-          additive_query.merge(CaughtException.send(element[:type], element[:field], element[:query]))
-        else
-          additive_query = CaughtException.send(element[:type], element[:field], element[:query])
-        end
-      end
-      @caught_exceptions = additive_query.merge(@caught_exceptions)
+      @caught_exceptions = CaughtException.search(search_text)
     end
 
     @caught_exceptions = @caught_exceptions.where(:project => params[:project]) if params[:project]
