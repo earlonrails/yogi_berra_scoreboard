@@ -91,6 +91,47 @@
           </tbody>
         </table>
 
+        <% if caught_exception["resque"] || caught_exception["sidekiq"] %>
+          <% queue_exception = caught_exception["resque"] || caught_exception["sidekiq"] %>
+          <%= caught_exception["resque"] ? "Resque" : "Sidekiq" %>
+          <table class="table table-striped table-hover table-condensed table-bordered">
+            <tbody>
+              <tr>
+                <td>
+                  Class
+                </td>
+                <td>
+                  <%= queue_exception["class"] %>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Queue
+                </td>
+                <td>
+                  <%= queue_exception["queue"] %>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Worker
+                </td>
+                <td>
+                  <%= queue_exception["worker"] %>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Arguments
+                </td>
+                <td>
+                  <%= queue_exception["args"].inspect %>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        <% end %>
+
         <div class="well">
           Backtraces
           <div class="editor" id="editor-backtraces-<%= caught_exception._id %>"></div>
