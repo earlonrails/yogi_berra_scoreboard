@@ -1,16 +1,37 @@
 <% @map_reduced_caught_exceptions.each_with_index do |caught_exception, index| %>
-  <div class="panel panel-warning">
+  <%
+    first_line = caught_exception['_id']
+    first_line_escaped = CGI::escape(first_line)
+    id = "exception-#{index}"
+  %>
+  <div id='<%= id %>' class="panel panel-warning">
     <div class="panel-heading">
       <h3 class="panel-title">
-        <a href="/many_exceptions?line_one=<%= CGI::escape(caught_exception["_id"]) %>">
-          <button class="btn btn-warning btn-lg">
-            <span class="glyphicon glyphicon-fire"></span> <%= caught_exception["value"]["count"] %>
-          </button>
-        </a>
-        <span style="margin-left: 10px">
-          <%= caught_exception["_id"] %>
-        </span>
+        <div class="row">
+          <div class="col-md-1">
+            <a href="/many_exceptions?line_one=<%= first_line_escaped %>">
+              <button class="btn btn-warning btn-lg">
+                <span class="glyphicon glyphicon-fire"></span> <%= caught_exception["value"]["count"] %>
+              </button>
+            </a>
+          </div>
+
+          <div class="col-md-8">
+            <span style="margin-left: 10px">
+              <%= first_line %>
+            </span>
+          </div>
+
+          <div class="col-md-1">
+            <button class="btn btn-danger btn-lg" onclick="dismissError('<%= id %>', '<%= first_line_escaped %>')">
+              <span class="glyphicon glyphicon-warning-sign"></span>
+              Dismiss All
+            </button>
+          </div>
+        </div>
       </h3>
+
+
     </div>
     <div class="panel-body error-summary-box">
       <div class="row">
@@ -55,16 +76,17 @@
             <div id="caught_exception_chart<%= index %>" style="width:400px;height:200px"></div>
 
             <script type="text/javascript">
-              var dates = <%= raw caught_exception["value"]["dates"] %>;
+              <% caught_exception_dates = caught_exception["value"]["dates"] || [ caught_exception["value"]["date"].to_i ] || [] %>
+              var dates = <%= raw caught_exception_dates %>;
               var dateCounter = function(dates) {
                 var results = {};
-                dates.forEach(function(date){
-                  date = new Date(date);
+                dates.forEach(function(dateTime){
+                  var date = new Date(dateTime);
                   var dateString = date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear();
                   if (results.hasOwnProperty(dateString)) {
                     results[dateString] += 1;
                   } else {
-                    results[dateString] = 0;
+                    results[dateString] = 1;
                   }
                 });
 
@@ -76,29 +98,32 @@
                 return results;
               };
 
-              var dateResults = dateCounter(dates);
-              $("#caught_exception_chart<%= index %>").highcharts({
-                chart: {
-                 type: 'column'
-                },
-                title: {
-                  text: ""
-                },
-                xAxis: {
-                  categories: dateResults.dateLabels
-                },
-                yAxis: {
-                  min: 0,
+              if (dates.length > 0) {
+                var dateResults = dateCounter(dates);
+
+                $("#caught_exception_chart<%= index %>").highcharts({
+                  chart: {
+                   type: 'column'
+                  },
                   title: {
-                      text: 'Number of errors'
-                  }
-                },
-                colors: ['#f0ad4e'],
-                series: [{
-                  data: dateResults.countArray,
-                  showInLegend: false
-                }]
-              })
+                    text: ""
+                  },
+                  xAxis: {
+                    categories: dateResults.dateLabels
+                  },
+                  yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'Number of errors'
+                    }
+                  },
+                  colors: ['#f0ad4e'],
+                  series: [{
+                    data: dateResults.countArray,
+                    showInLegend: false
+                  }]
+                });
+              }
             </script>
           </div>
         </div>
