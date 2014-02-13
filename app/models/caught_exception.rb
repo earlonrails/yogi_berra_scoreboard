@@ -28,13 +28,13 @@ class CaughtException
   scope :like, lambda { |column, value| where(column.to_s => /.*#{value}.*/i) if column && value }
 
   def self.group_by_error_message
-    map = %Q{
+    map = <<-MAP_DOC
       function() {
         emit(this.error_message, { count: 1, date: this.created_at, id: this._id });
       }
-    }
+    MAP_DOC
 
-    reduce = %Q{
+    reduce = <<-REDUCE_DOC
       function(key, values) {
         var result = {count: 0, dates: [], ids: []};
         values.forEach(function(value){
@@ -46,7 +46,8 @@ class CaughtException
         });
         return result;
       }
-    }
+    REDUCE_DOC
+
     where(:error_message => {'$exists' => true, '$ne' => ""}).map_reduce(map, reduce).out(inline: true).sort_by do |message|
       message["value"]["count"] = message["value"]["count"].to_i
       -message["value"]["count"]
@@ -54,13 +55,13 @@ class CaughtException
   end
 
   def self.group_by_first_line
-    map = %Q{
+    map = <<-MAP_DOC
       function() {
         emit(this.backtraces[0], { count: 1, date: this.created_at, id: this._id, remote_address: this.remote_address, user_agent: this.user_agent });
       }
-    }
+    MAP_DOC
 
-    reduce = %Q{
+    reduce = <<-REDUCE_DOC
       function(key, values) {
         var result = {count: 0, dates: [], ids: [], agents: {}, ips: {}};
         values.forEach(function(value){
@@ -83,10 +84,21 @@ class CaughtException
         });
         return result;
       }
-    }
-    where(:error_message => {'$exists' => true, '$ne' => ""}).map_reduce(map, reduce).out(inline: true).sort_by do |message|
-      message["value"]["count"] = message["value"]["count"].to_i
-      -message["value"]["count"]
+    REDUCE_DOC
+
+    exceptions = where(
+      :error_message => {'$exists' => true, '$ne' => ""}
+    ).or(
+      {:dismissed => false},
+      {:dismissed => {
+        '$exists' => false
+        }
+      }
+    ).map_reduce(map, reduce).out(inline: true)
+
+    exceptions.sort_by do |exception|
+      exception["value"]["count"] = exception["value"]["count"].to_i
+      -exception["value"]["count"]
     end
   end
 

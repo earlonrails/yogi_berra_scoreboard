@@ -6,7 +6,7 @@ gem 'bson_ext', :platform => :ruby
 gem 'mongo'
 gem 'mongoid', '~> 3.1.2'
 gem 'qu-mongo'
-gem 'jquery-rails', '3.0.4'
+gem 'jquery-rails', '3.1.0'
 gem 'kaminari', '0.15.0'
 gem 'bootstrap-kaminari-views'
 gem 'puma', :platform => :jruby
